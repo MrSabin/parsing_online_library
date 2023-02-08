@@ -1,5 +1,7 @@
-import requests, urllib3
 from pathlib import Path
+
+import requests
+import urllib3
 
 
 def download_book(path, book_id):
