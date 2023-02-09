@@ -1,4 +1,5 @@
 from pathlib import Path
+from urllib.parse import urljoin
 
 import requests
 import urllib3
@@ -26,26 +27,27 @@ def check_for_redirect(response):
         pass
 
 
-def parse_book_name(book_id):
-    url = f"https://tululu.org/b{book_id}/"
-    response = requests.get(url)
+def parse_book_page(book_id):
+    base_url = "https://tululu.org"
+    page_url = urljoin(base_url, f"b{book_id}/")
+    response = requests.get(page_url, verify=False)
     response.raise_for_status()
     check_for_redirect(response)
 
     soup = BeautifulSoup(response.text, "lxml")
     book_with_author = soup.find("h1").text.split("::")
     book = book_with_author[0].strip()
-    author = book_with_author[1].strip()
+    image_partial_url = soup.find("div", class_="bookimage").find("img")["src"]
+    image_url = urljoin(base_url, image_partial_url)
 
     return book
 
 
 def main():
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
     for book_id in range(1, 11):
         try:
-            filename = parse_book_name(book_id)
+            filename = parse_book_page(book_id)
             download_txt(book_id, filename)
         except requests.HTTPError:
             print("File URL is not valid. Skipping to next...")
