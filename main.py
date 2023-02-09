@@ -52,17 +52,19 @@ def parse_book_page(book_id):
     book = book_with_author[0].strip()
     image_partial_url = soup.find("div", class_="bookimage").find("img")["src"]
     image_url = urljoin(base_url, image_partial_url)
+    comments_soup = soup.select("#content .texts .black")
+    comments = [comment.text for comment in comments_soup]
 
-    return book, image_url
+    return book, image_url, comments
 
 
 def main():
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     for book_id in range(1, 11):
         try:
-            book_name, image_url = parse_book_page(book_id)
-            download_txt(book_id, book_name)
-            download_image(image_url)
+            book_name, image_url, comments = parse_book_page(book_id)
+            # download_txt(book_id, book_name)
+            # download_image(image_url)
         except requests.HTTPError:
             print("File URL is not valid. Skipping to next...")
             continue
