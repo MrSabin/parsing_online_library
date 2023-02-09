@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 from urllib.parse import unquote, urljoin, urlsplit
 
@@ -68,7 +69,18 @@ def parse_book_page(book_id):
 
 def main():
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    for book_id in range(1, 11):
+    parser = argparse.ArgumentParser(
+        description="Script for chain downloading books from tululu.org"
+    )
+    parser.add_argument(
+        "--start_id", "-s", type=int, help="Starting from this ID", default=1
+    )
+    parser.add_argument(
+        "--end_id", "-e", type=int, help="Ends with this ID", default=11
+    )
+    args = parser.parse_args()
+
+    for book_id in range(args.start_id, args.end_id):
         try:
             parsed_page = parse_book_page(book_id)
             download_txt(book_id, parsed_page["book_name"])
