@@ -34,6 +34,15 @@ def download_image(image_url, folder="images/"):
         file.write(response.content)
 
 
+def save_comments(book_id, comments, folder="comments/"):
+    Path(folder).mkdir(parents=True, exist_ok=True)
+    filename = f"{book_id}.txt"
+    filepath = Path(folder, filename)
+
+    with open(filepath, "w") as file:
+        file.write(comments)
+
+
 def check_for_redirect(response):
     if response.history:
         raise requests.HTTPError
@@ -54,7 +63,8 @@ def parse_book_page(book_id):
     image_partial_url = soup.find("div", class_="bookimage").find("img")["src"]
     image_url = urljoin(base_url, image_partial_url)
     comments_soup = soup.select("#content .texts .black")
-    comments = [comment.text for comment in comments_soup]
+    fetched_comments = [comment.text for comment in comments_soup]
+    comments = "\n".join(fetched_comments)
     genre_soup = soup.select("span.d_book a")
     genre = [genre.text for genre in genre_soup]
     parsed_page = {
@@ -85,6 +95,8 @@ def main():
             parsed_page = parse_book_page(book_id)
             download_txt(book_id, parsed_page["book_name"])
             download_image(parsed_page["image_url"])
+            if parsed_page["comments"]:
+                save_comments(book_id, parsed_page["comments"])
         except requests.HTTPError:
             print("File URL is not valid. Skipping to next...")
             continue
