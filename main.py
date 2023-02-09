@@ -56,19 +56,23 @@ def parse_book_page(book_id):
     comments = [comment.text for comment in comments_soup]
     genre_soup = soup.select("span.d_book a")
     genre = [genre.text for genre in genre_soup]
-    print(book)
-    print(genre)
+    parsed_page = {
+        "book_name": book,
+        "image_url": image_url,
+        "comments": comments,
+        "genre": genre,
+    }
 
-    return book, image_url, comments
+    return parsed_page
 
 
 def main():
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     for book_id in range(1, 11):
         try:
-            book_name, image_url, comments = parse_book_page(book_id)
-            # download_txt(book_id, book_name)
-            # download_image(image_url)
+            parsed_page = parse_book_page(book_id)
+            download_txt(book_id, parsed_page["book_name"])
+            download_image(parsed_page["image_url"])
         except requests.HTTPError:
             print("File URL is not valid. Skipping to next...")
             continue
