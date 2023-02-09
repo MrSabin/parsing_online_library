@@ -6,14 +6,15 @@ from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 
 
-def download_txt(url, filename, folder="books/"):
+def download_txt(book_id, filename, folder="books/"):
+    url = f"https://tululu.org/txt.php?id={book_id}"
     sanitized_filename = sanitize_filename(filename)
     Path(folder).mkdir(parents=True, exist_ok=True)
     response = requests.get(url, verify=False)
     response.raise_for_status()
     check_for_redirect(response)
 
-    book_path = Path(folder, f"{sanitized_filename}.txt")
+    book_path = Path(folder, f"{book_id}. {sanitized_filename}.txt")
     with open(book_path, "w") as file:
         file.write(response.text)
 
@@ -43,10 +44,9 @@ def main():
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
     for book_id in range(1, 11):
-        url = f"https://tululu.org/txt.php?id={book_id}"
         try:
             filename = parse_book_name(book_id)
-            download_txt(url, filename)
+            download_txt(book_id, filename)
         except requests.HTTPError:
             print("File URL is not valid. Skipping to next...")
             continue
