@@ -54,6 +54,10 @@ def parse_book_page(book_id):
     image_url = urljoin(base_url, image_partial_url)
     comments_soup = soup.select("#content .texts .black")
     comments = [comment.text for comment in comments_soup]
+    genre_soup = soup.select("span.d_book a")
+    genre = [genre.text for genre in genre_soup]
+    print(book)
+    print(genre)
 
     return book, image_url, comments
 
