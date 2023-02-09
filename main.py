@@ -2,19 +2,20 @@ from pathlib import Path
 
 import requests
 import urllib3
+from pathvalidate import sanitize_filename
 
 
-def download_book(path, book_id):
-    url = f"https://tululu.org/txt.php?id={book_id}"
-    name = f"{book_id}.txt"
-
+def download_txt(url, filename, folder="books/"):
+    sanitized_filename = sanitize_filename(filename)
+    Path(folder).mkdir(parents=True, exist_ok=True)
     response = requests.get(url, verify=False)
     response.raise_for_status()
     check_for_redirect(response)
 
-    filename = Path(path, name)
-    with open(filename, "w") as file:
+    book_path = Path(folder, f"{sanitized_filename}.txt")
+    with open(book_path, "w") as file:
         file.write(response.text)
+        print(book_path)
 
 
 def check_for_redirect(response):
@@ -26,12 +27,11 @@ def check_for_redirect(response):
 
 def main():
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-    path = "books"
-    Path(path).mkdir(parents=True, exist_ok=True)
 
-    for book_id in range(1, 11):
+    for book_id in range(1, 2):
+        url = f"https://tululu.org/txt.php?id={book_id}"
         try:
-            download_book(path, book_id)
+            download_txt(url, "Али\\би", folder="txt/")
         except requests.HTTPError:
             print("File URL is not valid. Skipping to next...")
             continue
