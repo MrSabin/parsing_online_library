@@ -60,7 +60,7 @@ def parse_book_page(book_id):
     book_with_author = soup.find("h1").text.split("::")
     book_name = book_with_author[0].strip()
     image_partial_url = soup.find("div", class_="bookimage").find("img")["src"]
-    image_url = urljoin(base_url, image_partial_url)
+    image_url = urljoin(response.url, image_partial_url)
     comments_soup = soup.select("#content .texts .black")
     fetched_comments = [comment.text for comment in comments_soup]
     comments = "\n".join(fetched_comments)
