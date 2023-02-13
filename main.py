@@ -46,8 +46,6 @@ def save_comments(book_id, comments, folder="comments/"):
 def check_for_redirect(response):
     if response.history:
         raise requests.HTTPError
-    else:
-        pass
 
 
 def parse_book_page(book_id):
