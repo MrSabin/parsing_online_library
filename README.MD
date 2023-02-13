@@ -23,7 +23,7 @@ where `--start_id` or `-s` for short - starting page, and `--end_id` or `-e` for
 
 For example, if you type
 ```python
-python3 main.py 1 20
+python3 main.py -s 1 -e 20
 ```
 script will download books from page 1 to page 20. If no arguments inputed at all, default indexes will be used, which from 1 to 10 page.
 
