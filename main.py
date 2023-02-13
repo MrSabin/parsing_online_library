@@ -9,10 +9,11 @@ from pathvalidate import sanitize_filename
 
 
 def download_txt(book_id, filename, folder="books/"):
-    url = f"https://tululu.org/txt.php?id={book_id}"
+    url = "https://tululu.org/txt.php"
+    payload = {"id": book_id}
     sanitized_filename = sanitize_filename(filename)
     Path(folder).mkdir(parents=True, exist_ok=True)
-    response = requests.get(url, verify=False)
+    response = requests.get(url, params=payload, verify=False)
     response.raise_for_status()
     check_for_redirect(response)
 
@@ -64,12 +65,12 @@ def parse_book_page(book_id):
     fetched_comments = [comment.text for comment in comments_soup]
     comments = "\n".join(fetched_comments)
     genre_soup = soup.select("span.d_book a")
-    genre = [genre.text for genre in genre_soup]
+    genres = [genre.text for genre in genre_soup]
     parsed_page = {
         "book_name": book,
         "image_url": image_url,
         "comments": comments,
-        "genre": genre,
+        "genres": genres,
     }
 
     return parsed_page
