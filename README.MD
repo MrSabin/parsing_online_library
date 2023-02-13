@@ -1,5 +1,5 @@
 # Book parser for tululu.org online library
-This script is intended for downloading books from tululu.org online library alongside with their covers, genre information and user`s comments.
+This script is intended for downloading books from [tululu.org](https://tululu.org) online library alongside with their covers, genre information and user`s comments.
 
 ## Installation
 
