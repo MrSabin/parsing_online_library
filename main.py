@@ -1,4 +1,5 @@
 import argparse
+import time
 from pathlib import Path
 from urllib.parse import unquote, urljoin, urlsplit
 
@@ -49,13 +50,7 @@ def check_for_redirect(response):
         raise requests.HTTPError
 
 
-def parse_book_page(book_id):
-    base_url = "https://tululu.org"
-    page_url = urljoin(base_url, f"b{book_id}/")
-    response = requests.get(page_url, verify=False)
-    response.raise_for_status()
-    check_for_redirect(response)
-
+def parse_book_page(response):
     soup = BeautifulSoup(response.text, "lxml")
     book_with_author = soup.find("h1").text.split("::")
     book_name = book_with_author[0].strip()
@@ -90,15 +85,27 @@ def main():
     args = parser.parse_args()
 
     for book_id in range(args.start_id, args.end_id):
-        try:
-            parsed_page = parse_book_page(book_id)
-            download_txt(book_id, parsed_page["book_name"])
-            download_image(parsed_page["image_url"])
-            if parsed_page["comments"]:
-                save_comments(book_id, parsed_page["comments"])
-        except requests.HTTPError:
-            print("File URL is not valid. Skipping to next...")
-            continue
+        while True:
+            try:
+                base_url = "https://tululu.org"
+                page_url = urljoin(base_url, f"b{book_id}/")
+                response = requests.get(page_url, verify=False)
+                response.raise_for_status()
+                check_for_redirect(response)
+
+                parsed_page = parse_book_page(response)
+                download_txt(book_id, parsed_page["book_name"])
+                download_image(parsed_page["image_url"])
+                if parsed_page["comments"]:
+                    save_comments(book_id, parsed_page["comments"])
+            except requests.HTTPError:
+                print("File URL is not valid. Skipping to next...")
+                continue
+            except requests.ConnectionError:
+                print("Connection error, retrying in 10 seconds...")
+                time.sleep(10)
+            finally:
+                break
 
 
 if __name__ == "__main__":
