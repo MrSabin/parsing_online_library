@@ -7,9 +7,11 @@ from bs4 import BeautifulSoup
 
 def parse_page(response):
     soup = BeautifulSoup(response.text, "lxml")
-    book_id = soup.select_one("#content .d_book a")
-    book_url = urljoin(response.url, book_id["href"])
-    print(book_url)
+    book_ids = [
+        content.a["href"] for content in soup.select("#content .d_book")
+    ]
+    book_urls = [urljoin(response.url, book_id) for book_id in book_ids]
+    print(book_urls)
 
 
 def main():
