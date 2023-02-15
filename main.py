@@ -22,6 +22,8 @@ def download_txt(book_id, filename, folder="books/"):
     with open(book_path, "w") as file:
         file.write(response.text)
 
+    return book_path
+
 
 def download_image(image_url, folder="images/"):
     Path(folder).mkdir(parents=True, exist_ok=True)
@@ -35,9 +37,12 @@ def download_image(image_url, folder="images/"):
     with open(image_path, "wb") as file:
         file.write(response.content)
 
+    return image_path
+
 
 def save_comments(book_id, comments, folder="comments/"):
     Path(folder).mkdir(parents=True, exist_ok=True)
+    comments = "\n".join(comments)
     filename = f"{book_id}.txt"
     filepath = Path(folder, filename)
 
@@ -54,15 +59,16 @@ def parse_book_page(response):
     soup = BeautifulSoup(response.text, "lxml")
     book_with_author = soup.find("h1").text.split("::")
     book_name = book_with_author[0].strip()
+    author = book_with_author[1].strip()
     image_partial_url = soup.find("div", class_="bookimage").find("img")["src"]
     image_url = urljoin(response.url, image_partial_url)
     comments_soup = soup.select("#content .texts .black")
-    fetched_comments = [comment.text for comment in comments_soup]
-    comments = "\n".join(fetched_comments)
+    comments = [comment.text for comment in comments_soup]
     genre_soup = soup.select("span.d_book a")
     genres = [genre.text for genre in genre_soup]
     parsed_page = {
         "book_name": book_name,
+        "author": author,
         "image_url": image_url,
         "comments": comments,
         "genres": genres,
