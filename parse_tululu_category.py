@@ -1,3 +1,4 @@
+import argparse
 import json
 import time
 from pathlib import Path
@@ -32,22 +33,55 @@ def write_json(books_dump, folder="json/"):
         json.dump(books_dump, file, ensure_ascii=False, indent=4)
 
 
+def fetch_last_page():
+    url = "https://tululu.org/l55/"
+    response = requests.get(url, verify=False)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, "lxml")
+    last_page = soup.select("#content .center .npage")[-1].text
+
+    return int(last_page)
+
+
+def initialize_argparse():
+    parser = argparse.ArgumentParser(
+        description="Script for download books by category"
+    )
+    parser.add_argument(
+        "--start_page", type=int, help="Starting from this page"
+    )
+    parser.add_argument("--end_page", type=int, help="Ends with this page")
+
+    return parser
+
+
 def main():
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    parser = initialize_argparse()
+    args = parser.parse_args()
+    if not args.end_page:
+        args.end_page = fetch_last_page()
+
     all_book_urls = []
-    print("Fetching book urls...")
-    for page_number in tqdm(range(1, 5)):
-
-        url = f"https://tululu.org/l55/{page_number}"
-        response = requests.get(url, verify=False)
-        response.raise_for_status()
-
-        page_book_urls = parse_category_page(response)
-        all_book_urls.extend(page_book_urls)
-
-    print("Downloading books...")
     books_dump = []
 
+    print("Fetching book urls...")
+    for page_number in tqdm(range(args.start_page, args.end_page)):
+        try:
+            url = f"https://tululu.org/l55/{page_number}"
+            response = requests.get(url, verify=False)
+            response.raise_for_status()
+            check_for_redirect(response)
+            page_book_urls = parse_category_page(response)
+            all_book_urls.extend(page_book_urls)
+
+        except requests.HTTPError:
+            continue
+        except requests.ConnectionError:
+            print("Connection error, retrying in 10 seconds...")
+            time.sleep(10)
+
+    print("Downloading books...")
     for book_url in tqdm(all_book_urls):
         try:
             response = requests.get(book_url, verify=False)
