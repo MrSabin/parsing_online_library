@@ -9,11 +9,11 @@ from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 
 
-def download_txt(book_id, filename, folder="books/"):
+def download_txt(book_id, filename, root_folder="", folder="books/"):
     url = "https://tululu.org/txt.php"
     payload = {"id": book_id}
     sanitized_filename = sanitize_filename(filename)
-    Path(folder).mkdir(parents=True, exist_ok=True)
+    Path(root_folder, folder).mkdir(parents=True, exist_ok=True)
     response = requests.get(url, params=payload, verify=False)
     response.raise_for_status()
     check_for_redirect(response)
@@ -25,8 +25,8 @@ def download_txt(book_id, filename, folder="books/"):
     return book_path
 
 
-def download_image(image_url, folder="images/"):
-    Path(folder).mkdir(parents=True, exist_ok=True)
+def download_image(image_url, root_folder="", folder="images/"):
+    Path(root_folder, folder).mkdir(parents=True, exist_ok=True)
     splitted_url = urlsplit(unquote(image_url), allow_fragments=True)
     splitted_path = splitted_url.path.split("/")[-1]
     response = requests.get(image_url, verify=False)
