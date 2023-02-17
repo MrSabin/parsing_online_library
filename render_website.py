@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from livereload import Server
@@ -10,14 +11,21 @@ env = Environment(
 with open("json/books_dump.json", "r") as file:
     books_json = file.read()
 books_dump = json.loads(books_json)
-chunked_dump = list(chunked(books_dump, 2))
+books_on_page = 20
+columns_on_page = 2
+chunked_dump = list(chunked(books_dump, books_on_page))
 
 
 def rebuild():
     template = env.get_template("template.html")
-    rendered_page = template.render(books_dump=chunked_dump)
-    with open("index.html", "w", encoding="utf8") as file:
-        file.write(rendered_page)
+    pages_folder = "pages/"
+    Path(pages_folder).mkdir(parents=True, exist_ok=True)
+    for page_number, chunk in enumerate(chunked_dump, 1):
+        books = list(chunked(chunk, columns_on_page))
+        rendered_page = template.render(books_dump=books)
+        filename = Path(pages_folder, f"index{page_number}.html")
+        with open(filename, "w", encoding="utf8") as file:
+            file.write(rendered_page)
     print("Site rebuilt")
 
 
