@@ -48,3 +48,18 @@ For example, if you want to download books from pages 15 through 25, without ima
 ```python
 python3 parse_tululu_category.py --start_page 15 --end_page 25 --skip_images
 ```
+
+## `render_website.py` - script for render offline library website from data, gathered by `parse_tululu_category.py` script.
+
+For example, after using `parse_tululu_category` script, type
+```python
+python3 render_website.py
+```
+Script will download all needed data, and render site pages for offline use. This script runs local server as well, you can go to `127.0.0.1:5500` and start using generated site.
+
+You can find example of site at [GitHub Pages](https://mrsabin.github.io/parsing_online_library/)
+
+
+# Project goals
+
+The code is written for educational purposes on online-course for web-developers [dvmn.org](dvmn.org)
