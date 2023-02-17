@@ -20,20 +20,20 @@ env = Environment(
 )
 with open(args.json_path, "r") as file:
     books_dump = json.load(file)
-books_on_page = 20
+book_cards_on_page = 20
 columns_on_page = 2
-chunked_dump = list(chunked(books_dump, books_on_page))
-pages_count = len(chunked_dump)
+chunked_book_cards = list(chunked(books_dump, book_cards_on_page))
+pages_count = len(chunked_book_cards)
 
 
 def rebuild():
     template = env.get_template("template.html")
     pages_folder = "pages/"
     Path(pages_folder).mkdir(parents=True, exist_ok=True)
-    for page_number, chunk in enumerate(chunked_dump, 1):
-        books = list(chunked(chunk, columns_on_page))
+    for page_number, chunk in enumerate(chunked_book_cards, 1):
+        book_cards = list(chunked(chunk, columns_on_page))
         rendered_page = template.render(
-            books_dump=books,
+            book_cards=book_cards,
             pages_count=pages_count,
             page_number=page_number,
         )
