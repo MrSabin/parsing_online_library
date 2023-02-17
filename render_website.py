@@ -1,3 +1,4 @@
+import argparse
 import json
 from pathlib import Path
 
@@ -5,10 +6,19 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from livereload import Server
 from more_itertools import chunked
 
+parser = argparse.ArgumentParser(
+    description="Script for science fiction books download"
+)
+parser.add_argument(
+    "--json_path",
+    help="Folder with JSON file",
+    default="json/books_dump.json",
+)
+args = parser.parse_args()
 env = Environment(
     loader=FileSystemLoader("."), autoescape=select_autoescape(["html", "xml"])
 )
-with open("json/books_dump.json", "r") as file:
+with open(args.json_path, "r") as file:
     books_json = file.read()
 books_dump = json.loads(books_json)
 books_on_page = 20
@@ -31,7 +41,6 @@ def rebuild():
         filename = Path(pages_folder, f"index{page_number}.html")
         with open(filename, "w", encoding="utf8") as file:
             file.write(rendered_page)
-    print("Site rebuilt")
 
 
 rebuild()

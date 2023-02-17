@@ -58,6 +58,13 @@ For example, after using `parse_tululu_category` script, type
 ```python
 python3 render_website.py
 ```
+You can use your own json dump file by running script with `--json_path` parameter:
+```python
+python3 render_website.py --json_path "path_to_your_dump"
+```
+Use included `json/books_dump.json` file as a reference for making your own dump.
+If no path is specified, default `json/books_dump.json` dump will be used.
+
 Script will download all needed data, and render site pages for offline use. You can now open `index.html` file in repository root directory with your web-browser and start using the library. This script runs local server as well, you can go to `127.0.0.1:5500` and start using generated site. 
 
 You can find example of site at [GitHub Pages](https://mrsabin.github.io/parsing_online_library/)
