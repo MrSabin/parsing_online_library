@@ -58,7 +58,7 @@ For example, after using `parse_tululu_category` script, type
 ```python
 python3 render_website.py
 ```
-Script will download all needed data, and render site pages for offline use. This script runs local server as well, you can go to `127.0.0.1:5500` and start using generated site.
+Script will download all needed data, and render site pages for offline use. You can now open `index.html` file in repository root directory with your web-browser and start using the library. This script runs local server as well, you can go to `127.0.0.1:5500` and start using generated site. 
 
 You can find example of site at [GitHub Pages](https://mrsabin.github.io/parsing_online_library/)
 
