@@ -26,8 +26,8 @@ def parse_category_page(response):
     return book_urls
 
 
-def write_json(books_dump, folder="json/"):
-    Path(folder).mkdir(parents=True, exist_ok=True)
+def write_json(books_dump, root_folder, folder="json/"):
+    Path(root_folder, folder).mkdir(parents=True, exist_ok=True)
     filepath = Path(folder, "books_dump.json")
     with open(filepath, "w") as file:
         json.dump(books_dump, file, ensure_ascii=False, indent=4)
@@ -60,7 +60,9 @@ def initialize_argparse():
     parser.add_argument(
         "--skip_txt", action="store_true", help="Skip text download"
     )
-    parser.add_argument("--json_path", type=str, help="Folder for JSON dump")
+    parser.add_argument(
+        "--json_path", type=str, help="Folder for JSON dump", default=Path.cwd()
+    )
 
     return parser
 
