@@ -19,8 +19,7 @@ env = Environment(
     loader=FileSystemLoader("."), autoescape=select_autoescape(["html", "xml"])
 )
 with open(args.json_path, "r") as file:
-    books_json = file.read()
-books_dump = json.loads(books_json)
+    books_dump = json.load(file)
 books_on_page = 20
 columns_on_page = 2
 chunked_dump = list(chunked(books_dump, books_on_page))
