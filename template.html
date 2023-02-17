@@ -15,22 +15,26 @@
 
     <body>
 
-        {% for book in books_dump %}
-        <div class="card mb-3" style="max-width: 540px;">
+
+        <div class="container">
+            {% for chunk in books_dump %}
             <div class="row no-gutters">
-                <div class="col-md-4">
+                {% for book in chunk %}
+                <div class="col-md-2">
                     <img src="{{book.img_src}}" class="card-img" alt="{{book.book_name}} cover">
                 </div>
-                <div class="col-md-8">
+                <div class="col">
                     <div class="card-body">
                         <h5 class="card-title">{{book.book_name}}</h5>
                         <p class="card-text">{{book.author}}</p>
                         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
+                {% endfor %}
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+
 
         <!-- Optional JavaScript; choose one of the two! -->
 
