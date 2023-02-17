@@ -86,6 +86,7 @@ def main():
             all_book_urls.extend(page_book_urls)
 
         except requests.HTTPError:
+            print("File URL is not valid. Skipping to next...")
             continue
         except requests.ConnectionError:
             print("Connection error, retrying in 10 seconds...")
@@ -110,6 +111,7 @@ def main():
             parsed_page.pop("image_url", None)
             books_dump.append(parsed_page)
         except requests.HTTPError:
+            print("File URL is not valid. Skipping to next...")
             continue
         except requests.ConnectionError:
             print("Connection error, retrying in 10 seconds...")
