@@ -1,5 +1,5 @@
 ## This repo already contains all needed data to run offline library with science fiction books.
-If you just want to use it, download repo and open `index.html` file in repo root folder. Enjoy)
+If you just want to use it, download repo and open `index.html` file in repo root folder with your web-browser. Enjoy)
 
 # Book parser for tululu.org online library
 This script is intended for downloading books from [tululu.org](https://tululu.org) online library alongside with their covers, genre information and user`s comments.
