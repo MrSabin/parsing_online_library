@@ -1,7 +1,8 @@
-## This repo already contains all needed data to run offline library with science fiction books.
+# Offline use
+This repo already contains all needed data to run offline library with science fiction books.
 If you just want to use it, download repo and open `index.html` file in repo root folder with your web-browser. Enjoy)
 
-# Book parser for tululu.org online library
+# Using book parser
 This script is intended for downloading books from [tululu.org](https://tululu.org) online library alongside with their covers, genre information and user`s comments.
 
 ## Installation
@@ -33,7 +34,8 @@ script will download books from page 1 to page 20. If no arguments inputed at al
 Script will make directories for downloaded content inside current working directory - `books` for books .txt files, `images` for books covers and `comments` for book user comments, saved in .txt file.
 
 
-## `parse_tululu_category.py` - script for download books of science fiction genre.
+## `parse_tululu_category.py`
+Script intended for download books of science fiction genre.
 
 To run it, type
 ```
@@ -52,7 +54,8 @@ For example, if you want to download books from pages 15 through 25, without ima
 python3 parse_tululu_category.py --start_page 15 --end_page 25 --skip_images
 ```
 
-## `render_website.py` - script for render offline library website from data, gathered by `parse_tululu_category.py` script.
+# Generate offline website
+`render_website` - script for render offline library website from data, gathered by `parse_tululu_category.py` script.
 
 For example, after using `parse_tululu_category` script, type
 ```python
