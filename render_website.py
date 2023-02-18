@@ -7,14 +7,25 @@ from livereload import Server
 from more_itertools import chunked
 
 
-def rebuild(books_dump):
+def rebuild():
+    parser = argparse.ArgumentParser(
+        description="Script for science fiction books download"
+    )
+    parser.add_argument(
+        "--json_path",
+        help="Folder with JSON file",
+        default="json/books_dump.json",
+    )
+    args = parser.parse_args()
+    with open(args.json_path, "r") as file:
+        books_meta = json.load(file)
     env = Environment(
         loader=FileSystemLoader("."),
         autoescape=select_autoescape(["html", "xml"]),
     )
     book_cards_on_page = 20
     columns_on_page = 2
-    chunked_book_cards = list(chunked(books_dump, book_cards_on_page))
+    chunked_book_cards = list(chunked(books_meta, book_cards_on_page))
     pages_count = len(chunked_book_cards)
     template = env.get_template("template.html")
     pages_folder = "pages/"
@@ -32,21 +43,9 @@ def rebuild(books_dump):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Script for science fiction books download"
-    )
-    parser.add_argument(
-        "--json_path",
-        help="Folder with JSON file",
-        default="json/books_dump.json",
-    )
-    args = parser.parse_args()
-    with open(args.json_path, "r") as file:
-        books_dump = json.load(file)
-
-    rebuild(books_dump)
+    rebuild()
     server = Server()
-    server.watch("template.html", rebuild(books_dump))
+    server.watch("template.html", rebuild)
     server.serve(root=".")
 
 
