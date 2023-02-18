@@ -45,7 +45,7 @@
       {% for chunk in book_cards %}
         <div class="row no-gutters">
           {% for book in chunk %}
-            <div class="col-md-2">
+            <div class="col-md-2 m-2">
               <img src="../{{book.img_src|urlencode}}" class="card-img" alt="{{book.book_name}} cover">
             </div>
             <div class="col">
