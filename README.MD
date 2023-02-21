@@ -1,11 +1,14 @@
-# Offline use
+# Online library parser
+This project contains scripts for parsing [tululu.org](https://tululu.org) online library and create an offline library with parsed data.
+
+## Offline use
 This repo already contains all needed data to run offline library with science fiction books.
 If you just want to use it, download repo and open `index.html` file in repo root folder with your web-browser. Enjoy)
 
-# Using book parser
+## Using book parser
 This script is intended for downloading books from [tululu.org](https://tululu.org) online library alongside with their covers, genre information and user`s comments.
 
-## Installation
+### Installation
 
 Python 3 should be already installed.
 Install dependencies by running
@@ -13,7 +16,7 @@ Install dependencies by running
 pip install -r requirements.txt
 ```
 
-## Running
+### Running
 
 Run the `main.py` script by typing
 ```python
@@ -34,8 +37,8 @@ script will download books from page 1 to page 20. If no arguments inputed at al
 Script will make directories for downloaded content inside current working directory - `books` for books .txt files, `images` for books covers and `comments` for book user comments, saved in .txt file.
 
 
-## `parse_tululu_category.py`
-Script intended for download books of science fiction genre.
+## Using sci-fi genre parser
+`parse_tululu_category.py` - script intended for download books of science fiction genre.
 
 To run it, type
 ```
@@ -54,7 +57,7 @@ For example, if you want to download books from pages 15 through 25, without ima
 python3 parse_tululu_category.py --start_page 15 --end_page 25 --skip_images
 ```
 
-# Generate offline website
+## Generate offline website
 `render_website` - script for render offline library website from data, gathered by `parse_tululu_category.py` script.
 
 For example, after using `parse_tululu_category` script, type
@@ -73,6 +76,6 @@ Script will download all needed data, and render site pages for offline use. You
 You can find example of site at [GitHub Pages](https://mrsabin.github.io/parsing_online_library/)
 
 
-# Project goals
+## Project goals
 
 The code is written for educational purposes on online-course for web-developers [dvmn.org](https://dvmn.org/)
