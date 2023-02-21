@@ -45,6 +45,6 @@ Optional arguments:
 * `--json_path` - Folder for saving books JSON dump
 
 For example, if you want to download books from pages 15 through 25, without images, type
-```
+```python
 python3 parse_tululu_category.py --start_page 15 --end_page 25 --skip_images
 ```
