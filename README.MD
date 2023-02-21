@@ -62,4 +62,4 @@ You can find example of site at [GitHub Pages](https://mrsabin.github.io/parsing
 
 # Project goals
 
-The code is written for educational purposes on online-course for web-developers [dvmn.org](dvmn.org)
+The code is written for educational purposes on online-course for web-developers [dvmn.org](https://dvmn.org/)
